@@ -12,6 +12,8 @@
 #include <azure_c_shared_utility/tickcounter.h>
 #include <azure_c_shared_utility/threadapi.h>
 
+#include <atomic>
+
 int main(int argc, char **argv)
 {
     return k4a_test_commmon_main(argc, argv);
@@ -26,7 +28,7 @@ typedef struct _allocator_thread_adjust_ref_data_t
 
     uint32_t error;
     LOCK_HANDLE lock;
-    volatile uint32_t done_event;
+    std::atomic<uint32_t> done_event;
 } allocator_thread_adjust_ref_data_t;
 
 #define TEST_RETURN_VALUE (22)

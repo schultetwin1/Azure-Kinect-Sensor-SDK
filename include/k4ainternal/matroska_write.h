@@ -9,6 +9,7 @@
 #define RECORD_WRITE_H
 
 #include <k4ainternal/matroska_common.h>
+#include <atomic>
 #include <set>
 #include <condition_variable>
 #include <mutex>
@@ -76,7 +77,7 @@ typedef struct _k4a_record_context_t
     std::list<cluster_t *> pending_clusters;
     std::mutex pending_cluster_lock; // Locks last_written_timestamp, most_recent_timestamp, and pending_clusters
 
-    bool writer_stopping;
+    std::atomic<bool> writer_stopping;
     std::thread writer_thread;
     // std::condition_variable constructor may throw, so wrap this in a pointer.
     std::unique_ptr<std::condition_variable> writer_notify;

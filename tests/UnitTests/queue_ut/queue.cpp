@@ -13,6 +13,8 @@
 #include <azure_c_shared_utility/tickcounter.h>
 #include <azure_c_shared_utility/threadapi.h>
 
+#include <atomic>
+
 int main(int argc, char **argv)
 {
     return k4a_test_commmon_main(argc, argv);
@@ -41,7 +43,7 @@ typedef struct _threaded_queue_data_t
     uint32_t error;
     uint32_t dropped;
     LOCK_HANDLE lock;
-    volatile uint32_t done_event;
+    std::atomic<uint32_t> done_event;
 } threaded_queue_data_t;
 
 static k4a_capture_t capture_manufacture(size_t size)

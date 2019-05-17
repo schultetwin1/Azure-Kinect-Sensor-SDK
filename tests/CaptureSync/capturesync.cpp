@@ -678,6 +678,7 @@ static void capturesync_validate_synchronization(capturesync_test_timing_t *test
 
     Condition_Deinit(color_test.condition);
     Condition_Deinit(depth_test.condition);
+    Lock_Deinit(depth_test.lock);
 }
 
 static capturesync_test_timing_t *invert_test_data_for_depth_first(capturesync_test_timing_t *test_data,

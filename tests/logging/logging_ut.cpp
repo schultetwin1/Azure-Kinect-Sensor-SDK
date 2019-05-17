@@ -1,6 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+#include <atomic>
+
 #include <utcommon.h>
 
 // Module being tested
@@ -223,7 +225,7 @@ TEST_F(logging_ut, callback)
 
 typedef struct _logger_callback_threading_test_data_t
 {
-    volatile int done;
+    std::atomic<bool> done;
     LOCK_HANDLE lock;
 } logger_callback_threading_test_data_t;
 
@@ -239,7 +241,8 @@ static int logger_callback_thread(void *param)
         LOG_WARNING("Test Warning Message", 0);
         LOG_ERROR("Test Error Message", 0);
         LOG_CRITICAL("Test Critical Message", 0);
-    } while (data->done == 0);
+    } while (data->done == false);
+    Unlock(data->lock);
     return TEST_RETURN_VALUE;
 }
 
@@ -248,9 +251,11 @@ TEST_F(logging_ut, callback_threading)
     THREAD_HANDLE th;
     TICK_COUNTER_HANDLE tick;
     tickcounter_ms_t start_time_ms, now;
-    logger_callback_threading_test_data_t data = { 0 };
+    logger_callback_threading_test_data_t data;
     logger_test_callback_info_t info = { 0 };
     int count = 1;
+
+    data.done = false;
 
     ASSERT_NE((data.lock = Lock_Init()), (LOCK_HANDLE)NULL);
 

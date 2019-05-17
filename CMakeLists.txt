@@ -25,6 +25,14 @@ project(K4A LANGUAGES C CXX
 
 option(K4A_BUILD_DOCS "Build K4A doxygen documentation" OFF)
 option(K4A_MTE_VERSION "Skip FW version check" OFF)
+option(K4A_ENABLE_THREAD_SANITIZATION "Turn on Clang/GCC Thread Sanitizer" OFF)
+option(K4A_ENABLE_ADDRESS_SANITIZATION "Turn on Clang/GCC Address Sanitizer" OFF)
+
+# Find threading libraries before we mess with command line flags
+find_package(Threads REQUIRED)
+
+# Set sanitization flags if enabled
+include(k4aSanitization)
 
 include(GitCommands)
 

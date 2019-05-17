@@ -276,15 +276,19 @@ jobs:
       x64-clang_debug_ninja:
         CMakeLinuxTargetTriple: 'x86_64-linux-clang'
         CMakeConfiguration: 'debug'
+        CMakeFlags: '-DK4A_ENABLE_ADDRESS_SANITIZATION=ON'
       x64-gnu_debug_ninja:
         CMakeLinuxTargetTriple: 'x86_64-linux-gnu'
         CMakeConfiguration: 'debug'
+        CMakeFlags: '-DK4A_ENABLE_ADDRESS_SANITIZATION=ON'
       x64-clang_rel_ninja:
         CMakeLinuxTargetTriple: 'x86_64-linux-clang'
         CMakeConfiguration: 'relwithdebinfo'
+        CMakeFlags: ''
       x64-gnu_rel_ninja:
         CMakeLinuxTargetTriple: 'x86_64-linux-gnu'
         CMakeConfiguration: 'relwithdebinfo'
+        CMakeFlags: ''
 
       # 32-bit builds are currently broken
       # i386-unknown-linux-clang_debug_ninja:
@@ -323,7 +327,7 @@ jobs:
        fi
     displayName: 'Check Line Endings'
 
-  - script: 'cmake -GNinja -DCMAKE_VERBOSE_MAKEFILE=ON "$(Build.SourcesDirectory)" "-DCMAKE_BUILD_TYPE=$(CMakeConfiguration)" "-DCMAKE_TOOLCHAIN_FILE=$(Build.SourcesDirectory)/cmake/toolchains/$(CMakeLinuxTargetTriple).cmake"'
+  - script: 'cmake $(CMakeFlags) -GNinja -DCMAKE_VERBOSE_MAKEFILE=ON "$(Build.SourcesDirectory)" "-DCMAKE_BUILD_TYPE=$(CMakeConfiguration)" "-DCMAKE_TOOLCHAIN_FILE=$(Build.SourcesDirectory)/cmake/toolchains/$(CMakeLinuxTargetTriple).cmake"'
     workingDirectory: '$(Build.BinariesDirectory)'
     displayName: 'CMake Configure'
 
